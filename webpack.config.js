@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const htmlWebpackPlugin = require('html-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   mode: 'production',
@@ -37,15 +37,6 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        // use: [
-        //   {
-        //     loader: 'url-loader',
-        //     options: {
-        //       limit: 7876
-        //     }
-        //   }
-        // ]
-        
         use: 'url-loader?limit=7876&name=[hash:8]-[name].[ext]'
       },
       {

@@ -80,6 +80,33 @@ const store = new Vuex.Store({
 
       // 更新 cart 后，存入 localStorage
       localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    updateGoodsInfo(state, goodsinfo){
+      state.cart.some(item => {
+        if(item.id == goodsinfo.id){
+          item.count = parseInt(goodsinfo.count);
+        }
+        // 修改完商品数量，更新 cart 后，存入 localStorage
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      })
+    },
+    deleteGoodsFromCart(state, id){
+      state.cart.some((item, i) => {
+        if(item.id == id){
+          state.cart.splice(i, 1);
+        }
+        // 删除商品，更新 cart 后，存入 localStorage
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      })
+    },
+    updateGoodsSelected(state, info){
+      state.cart.some(item => {
+        if(item.id == info.id){
+          item.selected = info.selected;
+        }
+      });
+      // 更改完选中状态，更新 cart 后，存入 localStorage
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     }
   },
   getters: {
@@ -89,6 +116,36 @@ const store = new Vuex.Store({
         c += item.count;
       });
       return c;
+    },
+    getGoodsCount(state){
+      // 从购物车中获取数量
+      // 循环购物车中所有商品的数据，把商品的 id 作为 key，count 作为 value 保存到一个对象中 return 出去，格式为 { id: count }
+      // 创建一个空对象接收数据
+      let o = {};
+      state.cart.forEach(item => {
+        o[item.id] = item.count;
+      });
+      return o;
+    },
+    getGoodsSelected(state){
+      let o = {};
+      state.cart.forEach(item => {
+        o[item.id] = item.selected;
+      })
+      return o;
+    },
+    getGoodsAccount(state){
+      let o ={
+        count: 0, // 勾选的数量
+        amount: 0 // 勾选的总价
+      };
+      state.cart.forEach(item => {
+        if(item.selected){
+          o.count += item.count;
+          o.amount += item.price * item.count;
+        }
+      });
+      return o;
     }
   }
 });
